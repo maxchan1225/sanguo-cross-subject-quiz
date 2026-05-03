@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>三國跨學科測驗</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d2433;
+      --muted: #667085;
+      --line: #d9dee8;
+      --paper: #ffffff;
+      --bg: #f5f7fb;
+      --primary: #2f6fed;
+      --primary-dark: #1f55c7;
+      --accent: #b45309;
+      --success: #047857;
+      --danger: #c2410c;
+      --shadow: 0 18px 45px rgba(22, 34, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      background:
+        linear-gradient(135deg, rgba(47, 111, 237, 0.08), transparent 34%),
+        linear-gradient(315deg, rgba(180, 83, 9, 0.08), transparent 38%),
+        var(--bg);
+      color: var(--ink);
+    }
+
+    .shell {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      padding: 28px 16px 44px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: grid;
+      gap: 4px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 46px);
+      letter-spacing: 0;
+      line-height: 1.15;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .progress {
+      min-width: 104px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.74);
+      text-align: center;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .group-panel {
+      padding: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    label.field-label {
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .group-input {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border: 1px solid #b8c0cc;
+      border-radius: 8px;
+      font-size: 16px;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .group-input:focus {
+      outline: 3px solid rgba(47, 111, 237, 0.18);
+      border-color: var(--primary);
+    }
+
+    .question {
+      padding: 18px;
+    }
+
+    .question-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .number {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #eef4ff;
+      color: var(--primary-dark);
+      font-weight: 900;
+    }
+
+    .question-title {
+      margin: 3px 0 0;
+      font-size: 19px;
+      line-height: 1.45;
+      font-weight: 900;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .option {
+      min-height: 58px;
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid #c8ced8;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+    }
+
+    .option:hover {
+      border-color: var(--primary);
+      background: #f3f7ff;
+      transform: translateY(-1px);
+    }
+
+    .option input {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary);
+    }
+
+    .option span {
+      overflow-wrap: anywhere;
+      font-size: 16px;
+      font-weight: 650;
+    }
+
+    .actions {
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0 0;
+      background: linear-gradient(180deg, transparent, var(--bg) 22%);
+    }
+
+    .message {
+      min-height: 24px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .message.success {
+      color: var(--success);
+    }
+
+    .message.error {
+      color: var(--danger);
+    }
+
+    button {
+      min-height: 48px;
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 22px;
+      background: var(--primary);
+      color: white;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(47, 111, 237, 0.22);
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.65;
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        padding-top: 20px;
+      }
+
+      .topbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .progress {
+        width: 100%;
+      }
+
+      .options {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <h1>三國跨學科測驗</h1>
+        <p class="subtitle">請填寫組別名稱，完成 5 道選擇題後提交。</p>
+      </div>
+      <div class="progress" id="progress">0 / 5</div>
+    </header>
+
+    <form id="quizForm" autocomplete="off">
+      <section class="panel group-panel">
+        <label class="field-label" for="groupName">組別名稱</label>
+        <input class="group-input" id="groupName" name="groupName" type="text" maxlength="50" placeholder="例如：第一組" required>
+      </section>
+
+      <section id="questions"></section>
+
+      <div class="actions">
+        <div class="message" id="message" aria-live="polite"></div>
+        <button id="submitButton" type="submit">提交答案</button>
+      </div>
+    </form>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, collection, serverTimestamp, addDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      projectId: "teacherstudy-ac70b",
+      appId: "1:1028149564309:web:25f04802c852cc9bed5c9c",
+      storageBucket: "teacherstudy-ac70b.firebasestorage.app",
+      apiKey: "AIzaSyB0HXQdfKtMH5t480kmAo3u-1emjCuiJvE",
+      authDomain: "teacherstudy-ac70b.firebaseapp.com",
+      messagingSenderId: "1028149564309"
+    };
+
+    const questions = [
+      {
+        text: "三國時期蜀漢的建立者是誰？",
+        options: { A: "曹操", B: "劉備", C: "孫權", D: "司馬懿" },
+        answer: "B"
+      },
+      {
+        text: "「魏武帝」通常指的是誰？",
+        options: { A: "曹丕", B: "曹植", C: "曹操", D: "曹叡" },
+        answer: "C"
+      },
+      {
+        text: "正式建立曹魏政權、稱帝的人是誰？",
+        options: { A: "曹操", B: "曹丕", C: "曹植", D: "曹真" },
+        answer: "B"
+      },
+      {
+        text: "東吳的建立者是誰？",
+        options: { A: "孫策", B: "孫堅", C: "孫權", D: "孫皓" },
+        answer: "C"
+      },
+      {
+        text: "被後世稱為「武侯」的蜀漢人物是誰？",
+        options: { A: "姜維", B: "法正", C: "諸葛亮", D: "龐統" },
+        answer: "C"
+      }
+    ];
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const form = document.getElementById("quizForm");
+    const questionsEl = document.getElementById("questions");
+    const progressEl = document.getElementById("progress");
+    const messageEl = document.getElementById("message");
+    const submitButton = document.getElementById("submitButton");
+
+    questionsEl.innerHTML = questions.map((question, index) => {
+      const questionNumber = index + 1;
+      const options = Object.entries(question.options).map(([key, value]) => `
+        <label class="option">
+          <input type="radio" name="q${questionNumber}" value="${key}" required>
+          <span>${key}. ${value}</span>
+        </label>
+      `).join("");
+
+      return `
+        <article class="panel question">
+          <div class="question-head">
+            <div class="number">${questionNumber}</div>
+            <h2 class="question-title">${question.text}</h2>
+          </div>
+          <div class="options">${options}</div>
+        </article>
+      `;
+    }).join("");
+
+    form.addEventListener("change", updateProgress);
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      setMessage("", "");
+
+      const groupName = document.getElementById("groupName").value.trim();
+      if (!groupName) {
+        setMessage("請先輸入組別名稱。", "error");
+        return;
+      }
+
+      const answers = {};
+      for (let i = 1; i <= questions.length; i++) {
+        const selected = form.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) {
+          setMessage(`請完成第 ${i} 題。`, "error");
+          return;
+        }
+        answers[`q${i}`] = selected.value;
+      }
+
+      const score = questions.reduce((total, question, index) => {
+        return total + (answers[`q${index + 1}`] === question.answer ? 1 : 0);
+      }, 0);
+
+      submitButton.disabled = true;
+      submitButton.textContent = "提交中...";
+
+      try {
+        await addDoc(collection(db, "sanguo_quiz_submissions"), {
+          groupName,
+          answers,
+          score,
+          submittedAt: serverTimestamp(),
+          userAgent: navigator.userAgent.slice(0, 180)
+        });
+
+        setMessage(`提交成功，分數 ${score} / ${questions.length}。`, "success");
+        form.reset();
+        updateProgress();
+      } catch (error) {
+        console.error(error);
+        setMessage("提交失敗，請稍後再試。", "error");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "提交答案";
+      }
+    });
+
+    function updateProgress() {
+      const answered = questions.filter((_, index) => {
+        return form.querySelector(`input[name="q${index + 1}"]:checked`);
+      }).length;
+      progressEl.textContent = `${answered} / ${questions.length}`;
+    }
+
+    function setMessage(text, type) {
+      messageEl.textContent = text;
+      messageEl.className = type ? `message ${type}` : "message";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /wordcloud_words/{document} {
+      allow read, write: if true;
+    }
+
+    match /sanguo_quiz_submissions/{document} {
+      allow create: if request.resource.data.keys().hasOnly([
+          'groupName',
+          'answers',
+          'score',
+          'submittedAt',
+          'userAgent'
+        ])
+        && request.resource.data.groupName is string
+        && request.resource.data.groupName.size() > 0
+        && request.resource.data.groupName.size() <= 50
+        && request.resource.data.answers is map
+        && request.resource.data.answers.keys().hasAll(['q1', 'q2', 'q3', 'q4', 'q5'])
+        && request.resource.data.answers.q1 in ['A', 'B', 'C', 'D']
+        && request.resource.data.answers.q2 in ['A', 'B', 'C', 'D']
+        && request.resource.data.answers.q3 in ['A', 'B', 'C', 'D']
+        && request.resource.data.answers.q4 in ['A', 'B', 'C', 'D']
+        && request.resource.data.answers.q5 in ['A', 'B', 'C', 'D']
+        && request.resource.data.score is int
+        && request.resource.data.score >= 0
+        && request.resource.data.score <= 5
+        && request.resource.data.submittedAt == request.time;
+      allow read, update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

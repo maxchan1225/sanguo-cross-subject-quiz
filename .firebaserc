@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "teacherstudy-ac70b"
-  }
+  },
+  "targets": {
+    "teacherstudy-ac70b": {
+      "hosting": {
+        "sanguo": [
+          "teacherstudy-ac70b-sanguo"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
